@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@microservice-poc/entities": ["libs/entities/src/index.ts"],
+      "@microservice-poc/stock-provider": ["libs/stock-provider/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
