@@ -1,2 +1,2 @@
-export * from './product.interface';
-export * from './stock.interface';
+export * from './product.class';
+export * from './stock.type';

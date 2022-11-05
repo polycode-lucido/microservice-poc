@@ -1,4 +1,4 @@
-import { Product } from './product.interface';
+import { Product } from './product.class';
 
 export type Stock = {
   product: Product;

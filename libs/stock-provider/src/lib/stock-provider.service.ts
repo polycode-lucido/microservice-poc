@@ -1,4 +1,12 @@
-import { Inventory, Product, Stock } from '@microservice-poc/entities';
+import {
+  InsufficientStockError,
+  Inventory,
+  Product,
+  ProductAlreadyExistsError,
+  ProductNotFoundError,
+  Stock,
+  StockNotFoundError,
+} from '@microservice-poc/entities';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -38,10 +46,46 @@ export class StockProviderService {
   }
 
   getStock(name: string): Stock {
-    return this.inventory.find((stock) => stock.product.name === name);
+    const stock = this.inventory.find((stock) => stock.product.name === name);
+    if (!stock) {
+      throw new StockNotFoundError(name);
+    }
+    return stock;
   }
 
   getProduct(name: string): Product {
-    return this.products[name];
+    const product = this.products[name];
+    if (!product) {
+      throw new ProductNotFoundError(name);
+    }
+    return product;
+  }
+
+  addStock(name: string, quantity: number): number {
+    quantity = +quantity;
+    const stock = this.getStock(name);
+    if (!stock) {
+      throw new StockNotFoundError(name);
+    }
+    if (stock.quantity + quantity < 0) {
+      throw new InsufficientStockError(
+        stock.quantity,
+        stock.quantity + quantity
+      );
+    }
+    stock.quantity += quantity;
+    return stock.quantity;
+  }
+
+  addProduct(product: Product): Product {
+    if (this.products[product.name]) {
+      throw new ProductAlreadyExistsError(product.name);
+    }
+    this.products[product.name] = product;
+    this.inventory.push({
+      product,
+      quantity: 0,
+    });
+    return product;
   }
 }
