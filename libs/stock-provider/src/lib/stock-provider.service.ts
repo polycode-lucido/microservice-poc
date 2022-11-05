@@ -1,12 +1,10 @@
+import { Inventory, Product, Stock } from '@microservice-poc/entities';
 import {
-  InsufficientStockError,
-  Inventory,
-  Product,
-  ProductAlreadyExistsError,
-  ProductNotFoundError,
-  Stock,
   StockNotFoundError,
-} from '@microservice-poc/entities';
+  ProductNotFoundError,
+  InsufficientStockError,
+  ProductAlreadyExistsError,
+} from '@microservice-poc/error';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -68,10 +66,7 @@ export class StockProviderService {
       throw new StockNotFoundError(name);
     }
     if (stock.quantity + quantity < 0) {
-      throw new InsufficientStockError(
-        stock.quantity,
-        stock.quantity + quantity
-      );
+      throw new InsufficientStockError(stock.quantity, -quantity);
     }
     stock.quantity += quantity;
     return stock.quantity;

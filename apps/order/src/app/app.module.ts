@@ -1,7 +1,8 @@
+import { OrderProviderModule } from '@microservice-poc/order-provider';
 import { Module } from '@nestjs/common';
 
 @Module({
-  imports: [],
+  imports: [OrderProviderModule],
   controllers: [],
   providers: [],
 })

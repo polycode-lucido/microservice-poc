@@ -1,6 +1,11 @@
-import { Product } from '@microservice-poc/entities';
+import { Inventory, Product, Stock } from '@microservice-poc/entities';
+import {
+  InsufficientStockError,
+  ProductNotFoundError,
+  StockNotFoundError,
+} from '@microservice-poc/error';
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
@@ -9,25 +14,37 @@ export class StockConsumerService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  async getInventory() {
+  async getInventory(): Promise<Inventory> {
     const request = this.httpService.get(`${this.url}/inventory`);
 
     const { data } = await firstValueFrom(request);
     return data;
   }
 
-  async getStock(name: string) {
+  async getStock(name: string): Promise<Stock> {
     const request = this.httpService.get(`${this.url}/stock/${name}`);
 
-    const { data } = await firstValueFrom(request);
-    return data;
+    try {
+      const { data } = await firstValueFrom(request);
+      return data;
+    } catch (error) {
+      if (error.response.status === 404) {
+        throw new StockNotFoundError(name);
+      }
+    }
   }
 
-  async getProduct(name: string) {
+  async getProduct(name: string): Promise<Product> {
     const request = this.httpService.get(`${this.url}/product/${name}`);
 
-    const { data } = await firstValueFrom(request);
-    return data;
+    try {
+      const { data } = await firstValueFrom(request);
+      return data;
+    } catch (error) {
+      if (error.response.status === 404) {
+        throw new ProductNotFoundError(name);
+      }
+    }
   }
 
   async addStock(name: string, quantity: number) {
@@ -35,8 +52,16 @@ export class StockConsumerService {
       `${this.url}/stock/${name}/${quantity}`
     );
 
-    const { data } = await firstValueFrom(request);
-    return data;
+    try {
+      const { data } = await firstValueFrom(request);
+      return data;
+    } catch (error) {
+      if (error.response.status === 404) {
+        throw new ProductNotFoundError(name);
+      } else if (error.response.status === 409) {
+        throw new HttpException(error.response.data, error.response.status);
+      }
+    }
   }
 
   async addProduct(product: Product) {
