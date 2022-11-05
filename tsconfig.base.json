@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@microservice-poc/entities": ["libs/entities/src/index.ts"],
+      "@microservice-poc/error": ["libs/error/src/index.ts"],
       "@microservice-poc/stock-consumer": ["libs/stock-consumer/src/index.ts"],
       "@microservice-poc/stock-provider": ["libs/stock-provider/src/index.ts"]
     }
