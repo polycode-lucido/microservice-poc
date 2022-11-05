@@ -1,7 +1,7 @@
 {
-  "name": "microservice-poc",
+  "name": "stock",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/microservice-poc/src",
+  "sourceRoot": "apps/stock/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -10,10 +10,10 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/microservice-poc",
-        "main": "apps/microservice-poc/src/main.ts",
-        "tsConfig": "apps/microservice-poc/tsconfig.app.json",
-        "assets": ["apps/microservice-poc/src/assets"]
+        "outputPath": "dist/apps/stock",
+        "main": "apps/stock/src/main.ts",
+        "tsConfig": "apps/stock/tsconfig.app.json",
+        "assets": ["apps/stock/src/assets"]
       },
       "configurations": {
         "production": {
@@ -22,8 +22,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/microservice-poc/src/environments/environment.ts",
-              "with": "apps/microservice-poc/src/environments/environment.prod.ts"
+              "replace": "apps/stock/src/environments/environment.ts",
+              "with": "apps/stock/src/environments/environment.prod.ts"
             }
           ]
         }
@@ -32,11 +32,11 @@
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "microservice-poc:build"
+        "buildTarget": "stock:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "microservice-poc:build:production"
+          "buildTarget": "stock:build:production"
         }
       }
     },
@@ -44,14 +44,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/microservice-poc/**/*.ts"]
+        "lintFilePatterns": ["apps/stock/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/microservice-poc/jest.config.ts",
+        "jestConfig": "apps/stock/jest.config.ts",
         "passWithNoTests": true
       }
     }
