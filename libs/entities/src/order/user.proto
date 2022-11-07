@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package order;
+
+service UserService {
+  rpc getUsers(Emtpy) returns (GetUsersResponse);
+  rpc createUser(User) returns (User);
+}
+
+message GetUsersResponse { repeated User users = 1; }
+
+message User { string username = 1; }
+
+message Emtpy {}

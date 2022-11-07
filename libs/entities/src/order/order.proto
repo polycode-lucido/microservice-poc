@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package order;
+
+service OrderService {
+  rpc getOrders(Emtpy) returns (GetOrdersResponse);
+  rpc createOrder(Order) returns (Order);
+}
+
+message GetOrdersResponse { repeated Order orders = 1; }
+
+message Order {
+  string productName = 1;
+  int32 quantity = 2;
+  string username = 3;
+}
+
+message Emtpy {}
