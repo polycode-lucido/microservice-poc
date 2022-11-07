@@ -17,6 +17,7 @@
     "paths": {
       "@microservice-poc/entities": ["libs/entities/src/index.ts"],
       "@microservice-poc/error": ["libs/error/src/index.ts"],
+      "@microservice-poc/order-consumer": ["libs/order-consumer/src/index.ts"],
       "@microservice-poc/order-provider": ["libs/order-provider/src/index.ts"],
       "@microservice-poc/stock-consumer": ["libs/stock-consumer/src/index.ts"],
       "@microservice-poc/stock-provider": ["libs/stock-provider/src/index.ts"]
