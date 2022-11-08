@@ -1,0 +1,12 @@
+syntax = "proto3";
+package user;
+import "common.proto";
+
+service UserService {
+  rpc getUsers(common.Empty) returns (GetUsersResponse);
+  rpc createUser(UserGRPC) returns (UserGRPC);
+}
+
+message GetUsersResponse { repeated UserGRPC users = 1; }
+
+message UserGRPC { string username = 1; }

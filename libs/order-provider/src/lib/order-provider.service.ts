@@ -48,10 +48,11 @@ export class OrderProviderService {
       productName: product.name,
       quantity: order.quantity,
       username: user.username,
-      date: new Date(),
+      date: new Date().toISOString(),
     };
 
     this.orders.push(newOrder);
-    return order;
+
+    return newOrder;
   }
 }

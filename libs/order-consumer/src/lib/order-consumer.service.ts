@@ -1,45 +1,62 @@
-import { Order, User } from '@microservice-poc/entities';
-import { HttpService } from '@nestjs/axios';
-import { HttpException, Injectable } from '@nestjs/common';
-import { firstValueFrom } from 'rxjs';
+import {
+  Order,
+  OrderServiceClient,
+  ORDER_PACKAGE_NAME,
+  ORDER_SERVICE_NAME,
+  User,
+  UserServiceClient,
+  USER_PACKAGE_NAME,
+  USER_SERVICE_NAME,
+} from '@microservice-poc/entities';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { ClientGrpc } from '@nestjs/microservices';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 
 @Injectable()
-export class OrderConsumerService {
-  private readonly url = 'http://localhost:3001/api';
+export class OrderConsumerService implements OnModuleInit {
+  private orderService: OrderServiceClient;
+  private userService: UserServiceClient;
 
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    @Inject(ORDER_PACKAGE_NAME) private orderClient: ClientGrpc,
+    @Inject(USER_PACKAGE_NAME) private userClient: ClientGrpc
+  ) {}
 
-  async getUsers(): Promise<User> {
-    const request = this.httpService.get(`${this.url}/user`);
-
-    const { data } = await firstValueFrom(request);
-    return data;
+  onModuleInit(): void {
+    this.orderService =
+      this.orderClient.getService<OrderServiceClient>(ORDER_SERVICE_NAME);
+    this.userService =
+      this.userClient.getService<UserServiceClient>(USER_SERVICE_NAME);
   }
 
-  async getOrders(): Promise<Order> {
-    const request = this.httpService.get(`${this.url}/order`);
+  async getUsers(): Promise<User[]> {
+    const request = this.userService.getUsers({});
 
-    const { data } = await firstValueFrom(request);
-    return data;
+    const { users } = await firstValueFrom(request);
+    return users;
   }
 
-  async createUser(user: User) {
-    const request = this.httpService.post(`${this.url}/user/`, user);
+  async getOrders(): Promise<Order[]> {
+    const request = this.orderService.getOrders({});
 
-    const { data } = await firstValueFrom(request);
-    return data;
+    const { orders } = await firstValueFrom(request);
+
+    return orders
+      ? orders.map((order) => ({
+          ...order,
+          date: order.date ? order.date : new Date().toISOString(),
+        }))
+      : [];
   }
 
-  async createOrder(order: Order) {
-    const request = this.httpService.post(`${this.url}/order/`, order);
+  async createUser(user: User): Promise<User> {
+    return await firstValueFrom(this.userService.createUser(user));
+  }
 
-    try {
-      const { data } = await firstValueFrom(request);
-      return data;
-    } catch (error) {
-      if (error.response.status) {
-        throw new HttpException(error.response.data, error.response.status);
-      }
-    }
+  async createOrder(order: Order): Promise<Order> {
+    const createdOrder = await lastValueFrom(
+      this.orderService.createOrder(order)
+    );
+    return createdOrder;
   }
 }

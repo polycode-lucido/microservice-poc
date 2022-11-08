@@ -1,4 +1,4 @@
-import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class Order {
   @IsString()
@@ -11,6 +11,5 @@ export class Order {
   username: string;
 
   @IsOptional()
-  @IsDate()
-  date: Date;
+  date?: string;
 }

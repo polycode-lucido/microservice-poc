@@ -1,30 +1,36 @@
-import { Order, User } from '@microservice-poc/entities';
+import { Metadata } from '@grpc/grpc-js';
+import {
+  Empty,
+  GetOrdersResponse,
+  Order,
+  OrderGRPC,
+  OrderServiceController,
+  OrderServiceControllerMethods,
+} from '@microservice-poc/entities';
 import { AppBaseErrorToHttpFilter } from '@microservice-poc/error';
-import { Body, Controller, Get, Post, UseFilters } from '@nestjs/common';
+import { UseFilters } from '@nestjs/common';
+import { Observable } from 'rxjs';
 import { OrderProviderService } from './order-provider.service';
 
 @UseFilters(AppBaseErrorToHttpFilter)
-@Controller()
-export class OrderProviderController {
+@OrderServiceControllerMethods()
+export class OrderProviderController implements OrderServiceController {
   constructor(private readonly orderProviderService: OrderProviderService) {}
 
-  @Get('/user')
-  getUsers() {
-    return this.orderProviderService.getUsers();
+  getOrders(
+    request: Empty,
+    metadata?: Metadata
+  ):
+    | GetOrdersResponse
+    | Promise<GetOrdersResponse>
+    | Observable<GetOrdersResponse> {
+    return { orders: this.orderProviderService.getOrders() };
   }
 
-  @Get('/order')
-  getOrders() {
-    return this.orderProviderService.getOrders();
-  }
-
-  @Post('/order')
-  async createOrder(@Body() order: Order) {
-    return await this.orderProviderService.createOrder(order);
-  }
-
-  @Post('/user')
-  createUser(@Body() user: User) {
-    return this.orderProviderService.createUser(user);
+  createOrder(
+    request: OrderGRPC,
+    metadata?: Metadata
+  ): OrderGRPC | Promise<OrderGRPC> | Observable<OrderGRPC> {
+    return this.orderProviderService.createOrder(request);
   }
 }

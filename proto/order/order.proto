@@ -1,0 +1,17 @@
+syntax = "proto3";
+package order;
+import "common.proto";
+
+service OrderService {
+  rpc getOrders(common.Empty) returns (GetOrdersResponse);
+  rpc createOrder(OrderGRPC) returns (OrderGRPC);
+}
+
+message GetOrdersResponse { repeated OrderGRPC orders = 1; }
+
+message OrderGRPC {
+  string productName = 1;
+  int32 quantity = 2;
+  string username = 3;
+  optional string date = 4;
+}
