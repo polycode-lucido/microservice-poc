@@ -8,7 +8,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "protoc --plugin=./node_modules/ts-proto/protoc-gen-ts_proto --ts_proto_out=./libs/entities/src/grpc -I=./proto --ts_proto_opt=nestJs=true ./**/*.proto --ts_proto_opt=addGrpcMetadata=true --ts_proto_opt=useDate=string"
+          "mkdir -p ./dist/proto && cp -r ./proto ./dist && protoc --plugin=./node_modules/ts-proto/protoc-gen-ts_proto --ts_proto_out=./libs/entities/src/grpc --ts_proto_out=./dist/proto -I=./proto --ts_proto_opt=nestJs=true ./proto/**/*.proto --ts_proto_opt=addGrpcMetadata=true --ts_proto_opt=useDate=string --experimental_allow_proto3_optional"
         ]
       }
     },

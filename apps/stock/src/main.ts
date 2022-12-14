@@ -6,13 +6,26 @@
 import { AppBaseErrorToHttpFilter } from '@microservice-poc/error';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.GRPC,
+      options: {
+        package: ['stock'],
+        url: 'localhost:3000',
+        protoPath: [
+          join(__dirname, '../../proto', 'stock', 'stock.proto'),
+          join(__dirname, '../../proto', 'common.proto'),
+        ],
+      },
+    }
+  );
   app.useGlobalFilters(new AppBaseErrorToHttpFilter());
   app.useGlobalPipes(
     new ValidationPipe({
@@ -25,11 +38,10 @@ async function bootstrap() {
       skipUndefinedProperties: false,
     })
   );
-  const port = 3000;
-  await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
+
+  await app.listen();
+
+  Logger.log(`🚀 Application stock is running`);
 }
 
 bootstrap();

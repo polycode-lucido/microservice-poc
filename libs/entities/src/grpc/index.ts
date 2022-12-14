@@ -25,8 +25,12 @@ import {
   InventoryGRPC,
   ProductGRPC,
   STOCK_PACKAGE_NAME,
+  STOCK_SERVICE_NAME,
   StockGRPC,
   protobufPackage,
+  StockServiceClient,
+  StockServiceController,
+  StockServiceControllerMethods,
 } from './stock/stock';
 
 export {
@@ -55,8 +59,12 @@ export {
   InventoryGRPC,
   ProductGRPC,
   STOCK_PACKAGE_NAME,
+  STOCK_SERVICE_NAME,
   StockGRPC,
   protobufPackage,
+  StockServiceClient,
+  StockServiceController,
+  StockServiceControllerMethods,
 };
 
 export * from './common';

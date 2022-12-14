@@ -3,10 +3,10 @@ package stock;
 
 import "common.proto";
 
-service OrderService {
+service StockService {
   rpc getInventory(common.Empty) returns (InventoryGRPC);
   rpc getStock(GetByNameRequest) returns (StockGRPC);
-  rpc getProduct(GetByNameRequest) returns (StockGRPC);
+  rpc getProduct(GetByNameRequest) returns (ProductGRPC);
   rpc addStock(AddStockRequest) returns (AddStockRequest);
   rpc addProduct(ProductGRPC) returns (ProductGRPC);
 }

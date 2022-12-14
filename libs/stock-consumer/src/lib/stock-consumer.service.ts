@@ -1,73 +1,52 @@
-import { Inventory, Product, Stock } from '@microservice-poc/entities';
 import {
-  InsufficientStockError,
-  ProductNotFoundError,
-  StockNotFoundError,
-} from '@microservice-poc/error';
-import { HttpService } from '@nestjs/axios';
-import { HttpException, Injectable } from '@nestjs/common';
+  Inventory,
+  Product,
+  Stock,
+  StockServiceClient,
+  STOCK_PACKAGE_NAME,
+  STOCK_SERVICE_NAME,
+} from '@microservice-poc/entities';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
-export class StockConsumerService {
-  private readonly url = 'http://localhost:3000/api';
+export class StockConsumerService implements OnModuleInit {
+  private stockService: StockServiceClient;
 
-  constructor(private readonly httpService: HttpService) {}
+  constructor(@Inject(STOCK_PACKAGE_NAME) private stockClient: ClientGrpc) {}
+
+  onModuleInit(): void {
+    this.stockService =
+      this.stockClient.getService<StockServiceClient>(STOCK_SERVICE_NAME);
+  }
 
   async getInventory(): Promise<Inventory> {
-    const request = this.httpService.get(`${this.url}/inventory`);
+    const request = this.stockService.getInventory({});
 
-    const { data } = await firstValueFrom(request);
-    return data;
+    const { stock } = await firstValueFrom(request);
+    return stock as Inventory;
   }
 
   async getStock(name: string): Promise<Stock> {
-    const request = this.httpService.get(`${this.url}/stock/${name}`);
+    const request = this.stockService.getStock({ name });
 
-    try {
-      const { data } = await firstValueFrom(request);
-      return data;
-    } catch (error) {
-      if (error.response.status === 404) {
-        throw new StockNotFoundError(name);
-      }
-    }
+    return (await firstValueFrom(request)) as Stock;
   }
 
   async getProduct(name: string): Promise<Product> {
-    const request = this.httpService.get(`${this.url}/product/${name}`);
+    const request = this.stockService.getProduct({ name });
 
-    try {
-      const { data } = await firstValueFrom(request);
-      return data;
-    } catch (error) {
-      if (error.response.status === 404) {
-        throw new ProductNotFoundError(name);
-      }
-    }
+    return (await firstValueFrom(request)) as Product;
   }
 
   async addStock(name: string, quantity: number) {
-    const request = this.httpService.post(
-      `${this.url}/stock/${name}/${quantity}`
-    );
+    const request = this.stockService.addStock({ name, quantity });
 
-    try {
-      const { data } = await firstValueFrom(request);
-      return data;
-    } catch (error) {
-      if (error.response.status === 404) {
-        throw new ProductNotFoundError(name);
-      } else if (error.response.status === 409) {
-        throw new HttpException(error.response.data, error.response.status);
-      }
-    }
+    return await firstValueFrom(request);
   }
 
   async addProduct(product: Product) {
-    const request = this.httpService.post(`${this.url}/product/`, product);
-
-    const { data } = await firstValueFrom(request);
-    return data;
+    return await firstValueFrom(this.stockService.addProduct(product));
   }
 }

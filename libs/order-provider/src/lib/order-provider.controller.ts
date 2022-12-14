@@ -2,7 +2,6 @@ import { Metadata } from '@grpc/grpc-js';
 import {
   Empty,
   GetOrdersResponse,
-  Order,
   OrderGRPC,
   OrderServiceController,
   OrderServiceControllerMethods,
