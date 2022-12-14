@@ -1,0 +1,38 @@
+syntax = "proto3";
+package stock;
+
+import "common.proto";
+
+service OrderService {
+  rpc getInventory(common.Empty) returns (InventoryGRPC);
+  rpc getStock(GetByNameRequest) returns (StockGRPC);
+  rpc getProduct(GetByNameRequest) returns (StockGRPC);
+  rpc addStock(AddStockRequest) returns (AddStockRequest);
+  rpc addProduct(ProductGRPC) returns (ProductGRPC);
+}
+
+message GetByNameRequest { string name = 1; }
+message InventoryGRPC { repeated StockGRPC stock = 1; }
+message AddStockResponse { int32 newQuantity = 1; }
+message AddStockRequest {
+  string name = 1;
+  int32 quantity = 2;
+}
+
+message OrderGRPC {
+  string productName = 1;
+  int32 quantity = 2;
+  string username = 3;
+  optional string date = 4;
+}
+
+message StockGRPC {
+  ProductGRPC product = 1;
+  int32 quantity = 2;
+}
+
+message ProductGRPC {
+  string name = 1;
+  float price = 2;
+  optional int32 id = 3;
+}

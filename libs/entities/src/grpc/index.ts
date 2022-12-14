@@ -18,6 +18,17 @@ import {
   UserServiceControllerMethods,
 } from './order/user';
 
+import {
+  AddStockRequest,
+  AddStockResponse,
+  GetByNameRequest,
+  InventoryGRPC,
+  ProductGRPC,
+  STOCK_PACKAGE_NAME,
+  StockGRPC,
+  protobufPackage,
+} from './stock/stock';
+
 export {
   // Order
   GetOrdersResponse,
@@ -36,6 +47,16 @@ export {
   UserServiceClient,
   UserServiceController,
   UserServiceControllerMethods,
+
+  // Stock
+  AddStockRequest,
+  AddStockResponse,
+  GetByNameRequest,
+  InventoryGRPC,
+  ProductGRPC,
+  STOCK_PACKAGE_NAME,
+  StockGRPC,
+  protobufPackage,
 };
 
 export * from './common';
