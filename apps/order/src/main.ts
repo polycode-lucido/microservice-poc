@@ -18,7 +18,7 @@ async function bootstrap() {
       transport: Transport.GRPC,
       options: {
         package: ['order', 'user'],
-        url: 'localhost:3001',
+        url: `localhost:${process.env['PORT'] || 3001}`,
         protoPath: [
           join(__dirname, '../../proto', 'order', 'order.proto'),
           join(__dirname, '../../proto', 'order', 'user.proto'),

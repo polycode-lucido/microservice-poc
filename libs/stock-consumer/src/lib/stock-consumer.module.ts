@@ -12,7 +12,7 @@ import { StockConsumerService } from './stock-consumer.service';
         transport: Transport.GRPC,
         options: {
           package: ['stock'],
-          url: 'localhost:3000',
+          url: process.env['STOCK_URL'] || 'localhost:3000',
           protoPath: [
             join(__dirname, '../../proto/stock/stock.proto'),
             join(__dirname, '../../proto/common.proto'),

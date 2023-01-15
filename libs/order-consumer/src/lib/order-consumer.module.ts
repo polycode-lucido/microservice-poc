@@ -15,7 +15,7 @@ import { OrderConsumerService } from './order-consumer.service';
         transport: Transport.GRPC,
         options: {
           package: ['order'],
-          url: 'localhost:3001',
+          url: process.env['ORDER_URL'] || 'localhost:3001',
           protoPath: [
             join(__dirname, '../../proto/order/order.proto'),
             join(__dirname, '../../proto/common.proto'),
@@ -27,7 +27,7 @@ import { OrderConsumerService } from './order-consumer.service';
         transport: Transport.GRPC,
         options: {
           package: ['user'],
-          url: 'localhost:3001',
+          url: process.env['USER_URL'] || 'localhost:3001',
           protoPath: [
             join(__dirname, '../../proto/order/user.proto'),
             join(__dirname, '../../proto/common.proto'),
