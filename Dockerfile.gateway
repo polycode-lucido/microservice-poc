@@ -11,12 +11,12 @@ RUN npm install
 
 # Copy files and build the application
 COPY . .
-RUN apt update && apt install curl -y
-ENV PROTOC_ZIP=protoc-3.14.0-linux-x86_64.zip
-RUN curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.14.0/$PROTOC_ZIP \
-  && unzip -o $PROTOC_ZIP -d /usr/local bin/protoc \
-  && unzip -o $PROTOC_ZIP -d /usr/local 'include/*' \
-  && rm -f $PROTOC_ZIP
+RUN apt update && apt install curl -y && apt install protobuf-compiler -y
+# ENV PROTOC_ZIP=protoc-3.14.0-linux-x86_64.zip
+# RUN curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.14.0/$PROTOC_ZIP \
+#   && unzip -o $PROTOC_ZIP -d /usr/local bin/protoc \
+#   && unzip -o $PROTOC_ZIP -d /usr/local 'include/*' \
+#   && rm -f $PROTOC_ZIP
 
 RUN npm run build:gateway
 
