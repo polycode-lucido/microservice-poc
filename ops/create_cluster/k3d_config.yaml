@@ -1,0 +1,16 @@
+apiVersion: k3d.io/v1alpha4
+kind: Simple
+network: polycode-poc-k3d
+ports:
+  - port: 8082:80
+    nodeFilters:
+      - loadbalancer
+options:
+  k3s:
+    extraArgs:
+      # - arg: --tls-san=https://poly-code.com
+      #   nodeFilters:
+      #     - servers:*
+      - arg: --disable=traefik
+        nodeFilters:
+          - servers:*
