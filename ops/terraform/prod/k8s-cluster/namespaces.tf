@@ -9,3 +9,9 @@ resource "kubernetes_namespace" "ingress_nginx_namespace" {
     name = "ingress-nginx"
   }
 }
+
+resource "kubernetes_namespace" "istio_system_namespace" {
+  metadata {
+    name = "istio-system"
+  }
+}
