@@ -1,0 +1,13 @@
+# Prod values for backend.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 3
+
+ingress:
+  hosts:
+    - host: inventory.poly-code.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
