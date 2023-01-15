@@ -4,7 +4,9 @@
   "license": "MIT",
   "scripts": {
     "start": "nx run-many --target=serve --projects=gateway,order,stock",
-    "build": "nx build && cp -r ./proto ./dist/proto",
+    "build:stock": "nx build stock && mkdir -p ./dist/proto && cp -r ./proto/ ./dist/proto/",
+    "build:gateway": "nx build gateway && mkdir -p ./dist/proto && cp -r ./proto/ ./dist/proto/",
+    "build:order": "nx build order && mkdir -p ./dist/proto && cp -r ./proto/ ./dist/proto/",
     "test": "nx test"
   },
   "private": true,
