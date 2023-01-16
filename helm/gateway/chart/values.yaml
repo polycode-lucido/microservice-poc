@@ -12,7 +12,12 @@ fullnameOverride: 'gateway'
 env:
   - name: PORT
     value: "3000"
-
+  - name: ORDER_URL
+    value: "order:3000"
+  - name: USER_URL
+    value: "order:3000"
+  - name: STOCK_URL
+    value: "stock:3000"
 
 serviceAccount:
   # Specifies whether a service account should be created
