@@ -2,6 +2,8 @@
 
 This project is here to demonstrate how I would build a microservice architecture, and more specifically how I would make them communicate with each other.
 
+Here's a link to a working deployment of this project: https://inventory.poly-code.com/api/user
+
 ## Architecture
 We have 3 microservices:
 - stock
